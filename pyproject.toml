@@ -34,6 +34,7 @@ dev = ["black~=25.1.0", "isort~=6.0.1", "pre-commit~=4.2.0"]
 test = ["pytest~=8.4.0"]
 evolve = ["ray", "cma", "lm_eval", "wandb"]
 vllm = ["vllm==0.7.2", "lm_eval[vllm]"]
+mcp = ["mcp>=1.9.0,<2.0"]
 
 [project.urls]
 repository = "https://github.com/cg123/mergekit"
@@ -50,6 +51,7 @@ mergekit-extract-lora = "mergekit.scripts.extract_lora:main"
 mergekit-evolve = "mergekit.scripts.evolve:main"
 mergekit-pytorch = "mergekit.scripts.merge_raw_pytorch:main"
 mergekit-multi = "mergekit.scripts.multimerge:main"
+mergekit-mcp = "mergekit.scripts.mcp_server:main"
 
 [tool.setuptools]
 packages = [
