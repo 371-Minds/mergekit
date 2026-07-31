@@ -27,6 +27,7 @@
 - [Multi-Stage Merging (`mergekit-multi`)](#multi-stage-merging-mergekit-multi)
 - [Raw PyTorch Model Merging (`mergekit-pytorch`)](#raw-pytorch-model-merging-mergekit-pytorch)
 - [Tokenizer Transplantation (`mergekit-tokensurgeon`)](#tokenizer-transplantation-mergekit-tokensurgeon)
+- [Model Context Protocol Server (`mergekit-mcp`)](#model-context-protocol-server-mergekit-mcp)
 - [Citation](#citation)
 
 ## Why Merge Models?
@@ -56,6 +57,7 @@ Key features of `mergekit` include:
 - [Evolutionary merge methods](#evolutionary-merge-methods)
 - [Multi-stage merging](#multi-stage-merging-mergekit-multi) for complex workflows.
 - [Merging of raw PyTorch models (`mergekit-pytorch`)](#raw-pytorch-model-merging-mergekit-pytorch).
+- [Model Context Protocol (MCP) server](#model-context-protocol-server-mergekit-mcp) for AI agent integration.
 
 ## Installation
 
@@ -335,7 +337,57 @@ Use `mergekit-pytorch --help` for detailed options.
 
 `mergekit-tokensurgeon` is a specialized tool for transplanting tokenizers between models, allowing you to align the vocabulary of one model with another. This is particularly useful for cheaply producing draft models for speculative decoding or for cross-tokenizer knowledge distillation. See the [documentation](docs/tokensurgeon.md) for more details and how to use it.
 
-## Citation
+## Model Context Protocol Server (`mergekit-mcp`)
+
+`mergekit` ships a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that exposes its merging capabilities to AI agents and MCP-compatible clients such as Claude Desktop, Cursor, or any custom agent framework.
+
+### Installation
+
+Install the `mcp` optional dependency group:
+
+```sh
+pip install "mergekit[mcp]"
+```
+
+### Running the server
+
+Start the server with the stdio transport (default, suitable for most MCP clients):
+
+```sh
+mergekit-mcp
+```
+
+Or run it directly with Python:
+
+```sh
+python -m mergekit.scripts.mcp_server
+```
+
+### Available Tools
+
+| Tool | Description |
+|---|---|
+| `list_merge_methods` | List all supported merge methods with parameters and references |
+| `get_merge_method_info` | Get detailed info about a single merge method by name |
+| `validate_merge_config` | Validate a YAML merge configuration without running the merge |
+| `run_merge_from_config` | Execute a merge and write the merged model to a specified path |
+| `generate_merge_card` | Generate a Hugging Face model card for a merge configuration |
+
+### Connecting from Claude Desktop
+
+Add the following to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "mergekit": {
+      "command": "mergekit-mcp"
+    }
+  }
+}
+```
+
+
 
 If you find `mergekit` useful in your research, please consider citing the [paper](https://aclanthology.org/2024.emnlp-industry.36/):
 
